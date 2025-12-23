@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -10,19 +11,27 @@ import (
 )
 
 type ParallelDir struct {
-	root *treeNode
+	Root *treeNode `json:"root"`
 }
 
 type treeNode struct {
-	name     string
-	children []*treeNode
+	Name     string      `json:"name"`
+	Children []*treeNode `json:"children"`
 	mu       sync.Mutex
+}
+
+func (pd *ParallelDir) ToJson() string {
+	bytes, err := json.Marshal(pd.Root)
+	if err != nil {
+		log.Fatal("Error converting final tree to JSON:", err.Error())
+	}
+	return string(bytes)
 }
 
 func (t *treeNode) SafeAppendChild(childNode *treeNode) {
 	t.mu.Lock()
 	defer t.mu.Unlock()
-	t.children = append(t.children, childNode)
+	t.Children = append(t.Children, childNode)
 }
 
 func (t *treeNode) ToString() string {
@@ -32,8 +41,8 @@ func (t *treeNode) ToString() string {
 func (t *treeNode) toStringWithIndent(indent string) string {
 	var result strings.Builder
 
-	result.WriteString(indent + t.name + "\n")
-	for _, child := range t.children {
+	result.WriteString(indent + t.Name + "\n")
+	for _, child := range t.Children {
 		result.WriteString(child.toStringWithIndent(indent + "\t"))
 	}
 
@@ -42,27 +51,28 @@ func (t *treeNode) toStringWithIndent(indent string) string {
 
 func NewParallelDir(baseDir string) *ParallelDir {
 	return &ParallelDir{
-		root: &treeNode{
-			name:     baseDir,
-			children: make([]*treeNode, 0),
+		Root: &treeNode{
+			Name:     baseDir,
+			Children: make([]*treeNode, 0),
 		},
 	}
 }
 
 func (pd *ParallelDir) baseDir() string {
-	return pd.root.name
+	return pd.Root.Name
 }
 
 func (pd *ParallelDir) Run() {
 	var wg sync.WaitGroup
 	fmt.Println("Starting on", pd.baseDir())
-	listDirsRecursively(pd.root, &wg)
+	listDirsRecursively(pd.Root, &wg)
 	wg.Wait()
-	fmt.Println(pd.root.ToString())
+	//fmt.Println(pd.Root.ToString())
+	fmt.Println(pd.ToJson())
 }
 
 func listDirsRecursively(node *treeNode, wg *sync.WaitGroup) {
-	files, err := os.ReadDir(node.name)
+	files, err := os.ReadDir(node.Name)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -70,8 +80,8 @@ func listDirsRecursively(node *treeNode, wg *sync.WaitGroup) {
 	for _, file := range files {
 		if file.IsDir() {
 			childNode := &treeNode{
-				name:     filepath.Join(node.name, file.Name()),
-				children: make([]*treeNode, 0),
+				Name:     filepath.Join(node.Name, file.Name()),
+				Children: make([]*treeNode, 0),
 			}
 			node.SafeAppendChild(childNode)
 			wg.Go(func() {

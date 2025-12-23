@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 	"sync"
 )
 
@@ -14,6 +15,23 @@ type ParallelDir struct {
 type treeNode struct {
 	name     string
 	children []*treeNode
+}
+
+func (t *treeNode) ToString() string {
+	return t.toStringWithIndent("")
+}
+
+// TODO: Review and understand this - was vibe-coded
+func (t *treeNode) toStringWithIndent(indent string) string {
+	result := indent + t.name + "\n"
+	for i, child := range t.children {
+		if i == len(t.children)-1 {
+			result += child.toStringWithIndent(indent + "└── ")
+		} else {
+			result += child.toStringWithIndent(indent + "├── ")
+		}
+	}
+	return result
 }
 
 func NewParallelDir(baseDir string) *ParallelDir {
@@ -34,7 +52,7 @@ func (pd *ParallelDir) Run() {
 	fmt.Println("Starting on", pd.baseDir())
 	listDirsRecursively(pd.root, &wg)
 	wg.Wait()
-	fmt.Println(pd.root)
+	fmt.Println(pd.root.ToString())
 }
 
 func listDirsRecursively(node *treeNode, wg *sync.WaitGroup) {
@@ -46,7 +64,7 @@ func listDirsRecursively(node *treeNode, wg *sync.WaitGroup) {
 	for _, file := range files {
 		if file.IsDir() {
 			childNode := &treeNode{
-				name:     file.Name(),
+				name:     filepath.Join(node.name, file.Name()),
 				children: make([]*treeNode, 0),
 			}
 			node.children = append(node.children, childNode)

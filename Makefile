@@ -12,6 +12,12 @@ build:
 	@echo "Building $(BINARY_NAME)..."
 	@go build -o $(BINARY_NAME) .
 
+## build: runs the app
+.PHONY: run
+run:
+	@echo "Running the app..."
+	@go run ./...
+
 ## clean: Deletes all artefacts
 .PHONY: clean
 clean:

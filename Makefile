@@ -10,7 +10,7 @@ all: build test
 .PHONY: build
 build:
 	@echo "Building $(BINARY_NAME)..."
-	@go build -o $(BINARY_NAME) ./...
+	@go build -o $(BINARY_NAME) .
 
 ## clean: Deletes all artefacts
 .PHONY: clean

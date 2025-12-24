@@ -1,6 +1,10 @@
 package main
 
+import (
+	"github.com/rcdmrl/go-sandbox/fstree"
+)
+
 func main() {
-	pd := NewParallelDir("/Users/ricaamar/Documents/")
+	pd := fstree.NewParallelDir("/Users/ricaamar/Documents/")
 	pd.Run()
 }

@@ -2,6 +2,6 @@
 
 Just my personal Golang sandbox repo, nothing special.
 
-## Files
+## Packages
 
-- **paralleldir.go** — A silly example where I use goroutines, wait groups, mutex and JSON marshalling.
+- **fstree** — A toy file system tree (like the `tree` command) implementation to learn about goroutines, wait groups, and mutexes through parallel directory traversal.

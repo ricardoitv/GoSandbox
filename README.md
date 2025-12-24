@@ -2,6 +2,8 @@
 
 Just my personal Golang sandbox repo, nothing special.
 
+Each package may contain multiple versions where I experiment with different approaches to the same problem. Each version has its own README with more details.  And yes, this was mainly written by AI.
+
 ## Packages
 
-- **fstree** — A toy file system tree (like the `tree` command) implementation to learn about goroutines, wait groups, and mutexes through parallel directory traversal. Yes, this was written by AI.
+- **fstree** — A toy file system tree (like the `tree` command) implementation to learn about Go's concurrency primitives (goroutines, wait groups, mutexes, channels and all that 🎷).

@@ -1,4 +1,4 @@
-package fstree
+package v1
 
 import (
 	"encoding/json"

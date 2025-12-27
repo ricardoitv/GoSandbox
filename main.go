@@ -3,6 +3,7 @@ package main
 import (
 	fstreev1 "github.com/rcdmrl/go-sandbox/fstree/v1"
 	fstreev2 "github.com/rcdmrl/go-sandbox/fstree/v2"
+	todoappv1 "github.com/rcdmrl/go-sandbox/todoapp/v1"
 
 	"log"
 
@@ -13,8 +14,9 @@ func main() {
 	// deps / projects
 	pd1 := fstreev1.NewParallelDir("/Users/ricaamar/Documents/")
 	pd2 := fstreev2.NewParallelDir("/Users/ricaamar/Documents/")
+	api1 := todoappv1.NewTodoApp()
 	// form run + dispatch
-	form1 := tuiv1.NewMainForm(pd1, pd2)
+	form1 := tuiv1.NewMainForm(pd1, pd2, api1)
 	err := form1.Run()
 	if err != nil {
 		log.Fatal(err)

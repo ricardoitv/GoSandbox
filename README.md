@@ -15,3 +15,4 @@ Each package may contain multiple versions where I experiment with different app
 
 ## WIPs
 - [tui/v2](./tui/v2/readme.md)
+- [todoapp/v1](./todoapp/v1/readme.md)

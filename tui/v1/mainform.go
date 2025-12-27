@@ -4,15 +4,13 @@ import (
 	"fmt"
 
 	"github.com/charmbracelet/huh"
-	containersv1 "github.com/rcdmrl/go-sandbox/containers/v1"
 	fstreev1 "github.com/rcdmrl/go-sandbox/fstree/v1"
 	fstreev2 "github.com/rcdmrl/go-sandbox/fstree/v2"
 )
 
 const (
-	ProjFSTree     = "fstree"
-	ProjContainers = "containers"
-	ProjSayonara   = "sayonara"
+	ProjFSTree   = "fstree"
+	ProjSayonara = "sayonara"
 
 	FSTreeV1 = "v1"
 	FSTreeV2 = "v2"
@@ -24,11 +22,10 @@ type MainForm struct {
 	// deps
 	tree1 *fstreev1.ParallelDir
 	tree2 *fstreev2.ParallelDir
-	dc1   *containersv1.DockerCompose
 }
 
-func NewMainForm(tree1 *fstreev1.ParallelDir, tree2 *fstreev2.ParallelDir, dc1 *containersv1.DockerCompose) *MainForm {
-	return &MainForm{"", "", tree1, tree2, dc1}
+func NewMainForm(tree1 *fstreev1.ParallelDir, tree2 *fstreev2.ParallelDir) *MainForm {
+	return &MainForm{"", "", tree1, tree2}
 }
 
 // Run executes the multi-step flow: pick project, then (if needed) pick a version.
@@ -58,13 +55,6 @@ func (f *MainForm) Dispatch() error {
 		default:
 			return fmt.Errorf("unknown fs tree version %q", f.projectVersion)
 		}
-	case ProjContainers:
-		err := f.dc1.Start()
-		if err != nil {
-			return err
-		}
-		defer f.dc1.ShutDown()
-		return nil
 	case ProjSayonara:
 		fmt.Println("You called quits. Cya!")
 	default:
@@ -81,7 +71,6 @@ func (f *MainForm) runProjectSelect() error {
 				Title("Which project?").
 				Options(
 					huh.NewOption("FS Tree", ProjFSTree),
-					huh.NewOption("Containers", ProjContainers),
 					huh.NewOption("Sayonara", ProjSayonara),
 				).
 				Value(&f.projectName),

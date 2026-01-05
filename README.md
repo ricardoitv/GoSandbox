@@ -22,3 +22,4 @@ Each package may contain multiple versions where I experiment with different app
 ## Ideas for later
 
 - [OAuth 2.0 Course for Beginners @ freeCodeCamp](https://www.youtube.com/watch?v=WSsOXo07LeE)
+  - Follow along but use GO wherever possible

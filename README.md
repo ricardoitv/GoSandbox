@@ -23,3 +23,4 @@ Each package may contain multiple versions where I experiment with different app
 
 - [OAuth 2.0 Course for Beginners @ freeCodeCamp](https://www.youtube.com/watch?v=WSsOXo07LeE)
   - Follow along but use GO wherever possible
+- Try this on the fstree project: https://antonz.org/detecting-goroutine-leaks/
